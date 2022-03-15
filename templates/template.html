@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>parent template</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/template.css') }}">
+  </head>
+
+  <body>
+    <header>
+      <h1 class="logo">Music Genre Identifier</h1>
+      <nav>
+        <ul class="nav">
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('about') }}">About us</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+  </body>
+</html>
