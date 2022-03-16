@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html>
-  <head>
-      <title>HOME - Music Genre Identifier by Louis</title>
-  </head>
+{% extends "template.html" %}
 
-  <body>
-    {% extends "template.html" %}
 
-    {% block content %}
+{% block title %}
 
-    <h1>Homepage</h1>
-    <p>Welcome to the front page of my website</p>
-    <p>This is where the main bulk of operations will occur</p>
+  HOME
 
-  {% endblock %}
-  </body>
-</html>
+{% endblock %}
+
+
+{% block content %}
+
+  <h1>Homepage</h1>
+  <p>Welcome to the front page of my website</p>
+  <p>This is where you will be greeted</p>
+
+{% endblock %}
