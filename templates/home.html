@@ -12,7 +12,9 @@
 {% block content %}
 
   <h1>Homepage</h1>
-  <p>Welcome to the front page of my website</p>
-  <p>This is where you will be greeted</p>
-
+  <p>
+    Welcome to the front page of my website <br>
+    This is where you will be greeted
+  </p>
+<a href="{{ url_for('upload') }}"><div class="btn">CLICK ME TO UPLOAD THE THINGS</div></a>
 {% endblock %}
