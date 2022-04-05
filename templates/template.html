@@ -2,18 +2,19 @@
 <html>
   <head>
       <title>{% block title %} {% endblock %}</title>
-      <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/template.css') }}"> -->
-      <link rel="stylesheet" href="../static/css/template.css">
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/template.css') }}">
+      <!-- <link rel="stylesheet" href="../static/css/template.css"> -->
   </head>
 
   <body>
     <header>
-      <a href="{{ url_for('home') }}" class="logo">Music Genre Identifier</a>
+      <a href="{{ url_for('home') }}" class="logo">Genre<span style="color: navy">finder</span>.</a>
       <nav>
-        <a href="{{ url_for('home') }}" {% if request.path == '/' %} class="active" {% endif %} >Home</a>
-        <a href="{{ url_for('upload') }}" {% if request.path == '/upload/' %} class="active" {% endif %}">Upload</a>
-        <a href="{{ url_for('about') }}" {% if request.path == '/about/' %} class="active" {% endif %}>About</a>
+        <a href="{{ url_for('home') }}" {% if request.path == url_for('home') %} class="active" {% endif %} >Home</a>
+        <a href="{{ url_for('upload') }}" {% if request.path == url_for('upload') %} class="active" {% endif %} >Upload</a>
+        <a href="{{ url_for('about') }}" {% if request.path == url_for('about') %} class="active" {% endif %} >About</a>
       </nav>
+
     </header>
 
     {% block content %}
@@ -21,7 +22,7 @@
 
   <footer>
     <div class="footer-txt">
-      &copy; 2022 Louis Abery
+      &copy; 2022 Louis Abery. All rights reserved.
     </div>
     <a href="https://github.com/aybery/py-genre-identifier"><img src="{{ url_for('static', filename='img/git.png') }}"></a>
   </footer>
