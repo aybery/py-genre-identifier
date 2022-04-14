@@ -16,5 +16,10 @@
         Welcome to the main page of my website <br>
         This is where the main bulk of operations will occur
     </p>
+    <form method = "POST" enctype = "multipart/form-data">
+        <input type = "file" name = "file" />
+        <input type = "submit" value="upload"/>
+    </form>
+    <p> {{ message }} </p>
 
 {% endblock %}
