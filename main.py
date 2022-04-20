@@ -1,10 +1,14 @@
-import os
+import os, random
 
 from flask import Flask, render_template, url_for, request, flash, redirect, send_from_directory
 from werkzeug.utils import secure_filename
 
-ALLOWED_EXTENSIONS = {'wav', 'mp3'}  # only .wav and .mp3 files can be uploaded
+from analysefile import analysis_instance
 
+# only .wav and .mp3 files (mp3 files will be converted to wav before analysis) can be uploaded
+ALLOWED_EXTENSIONS = {'wav', 'mp3'}
+
+# initiates the Flask server
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'Audio'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000  # 16MB max size
@@ -55,7 +59,14 @@ def upload():
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
-            return redirect(url_for('analyse_file', name=filename))
+
+            full_analysis = analysis_instance()
+
+            prediction = full_analysis.predict(filepath)
+
+            return render_template('upload.html', pred=prediction)
+
+            #  return redirect(url_for('analyse_file', name=filename))
         else:
             error = "This is a file with a wrong extension :("
 
