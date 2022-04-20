@@ -73,10 +73,9 @@ def upload():
     return render_template('upload.html', error=error)
 
 
-@app.route('/uploaded/<name>')
-def analyse_file(name):
-    path = os.path.join(app.config['UPLOAD_FOLDER'], name)
-    return render_template('analysis.html', file=path)
+@app.route('/upload/prediction')
+def prediction_analysis():
+    return render_template('analysis.html')
     #return send_from_directory(app.config["UPLOAD_FOLDER"], name)
     # somehow embed the audio file into html so that it can analyse instead of just presenting the file
 

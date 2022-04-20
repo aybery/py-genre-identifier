@@ -7,7 +7,7 @@ GENRES = 10 #  number of genres available
 
 sr = 22050 #  Sample rate
 DURATION = 25
-SPT = SAMPLE_R * DURATION #  num of samples per track
+SPT = sr * DURATION #  num of samples per track
 
 SEGMENTS = 10
 SPS = int(SPT / SEGMENTS) #  num of samples in each segment
@@ -17,7 +17,7 @@ N_MELS = 128 #  for melspecs
 
 
 def prepare_file(path):
-    print()
+    print("prepare_file")
 
 class _analyse:
     _instance = None
@@ -38,10 +38,10 @@ class _analyse:
     def predict(self, path):
 
         # extract the mfccs
-        mfcc = self.preprocess(path)
+        mfcc = self.load_file(path)
         print(mfcc)
 
-        prediction = ''
+        prediction = 'I think it is a potaote'
 
         return prediction
 
