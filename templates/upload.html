@@ -8,7 +8,6 @@
 
 {% endblock %}
 
-
 {% block content %}
 
     <h1>-Upload-</h1>
@@ -20,6 +19,17 @@
         <input type = "file" name = "file" />
         <input type = "submit" value="upload"/>
     </form>
-    <p> {{ message }} </p>
+    {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                 <p>{{ message }}</p>
+             {% endfor %}
+         {% endif %}
+    {% endwith %}
+
 
 {% endblock %}
