@@ -11,7 +11,6 @@
       <a href="{{ url_for('home') }}" class="logo">Genre<span style="color: navy">finder</span>.</a>
       <nav>
         <a href="{{ url_for('home') }}" {% if request.path == url_for('home') %} class="active" {% endif %} >Home</a>
-        <a href="{{ url_for('upload') }}" {% if request.path == url_for('upload') %} class="active" {% endif %} >Upload</a>
         <a href="{{ url_for('about') }}" {% if request.path == url_for('about') %} class="active" {% endif %} >About</a>
       </nav>
 

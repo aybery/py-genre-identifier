@@ -12,26 +12,9 @@
 
     <h1>-Upload-</h1>
     <p>
-        Welcome to the main page of my website <br>
-        <strong>How to use:</strong> <br>
-        Please upload a file either a .wav or .mp3 (.wav is preferred) <br>
+        Your file is uploaded!
     </p>
-    <form method = "POST" enctype = "multipart/form-data">
-        <input type = "file" name = "file" />
-        <input type = "submit" value="upload"/>
-    </form>
-    {% if error %}
-        <p class=error><strong>Error:</strong> {{ error }}
-    {% endif %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                 <p>{{ message }}</p>
-             {% endfor %}
-         {% endif %}
-    {% endwith %}
-
-    <p> {{ pred }} </p>
+    <p> {{ msg }} </p>
 
 {% endblock %}

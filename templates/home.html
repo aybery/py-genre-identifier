@@ -4,19 +4,31 @@
 
 {% block title %}
 
-  HOME
+  Home
 
 {% endblock %}
 
-
 {% block content %}
 
-  <h1>-Homepage-</h1>
-  <p>
-    Welcome to the front page of my website <br>
-    This is where you will be greeted
-  </p>
+    <h1> Welcome! </h1>
+    <p>
+        <strong>How to use:</strong> <br>
+        Please upload a .wav audio file that is less than 16 MB <br>
+    </p>
+    <form method = "POST" enctype = "multipart/form-data">
+        <div class="upload-btn-wrapper">
+            <button class="btn">
+                <span style="color: white">Upload</span>
+            </button>
+            <input type = "file" name = "file" onchange="form.submit()" />
+        </div>
+    </form>
+    {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
 
-  <!-- <a href="{{ url_for('upload') }}"><div class="btn">CLICK ME TO UPLOAD THE THINGS</div></a> -->
+    {% if genre %}
+        <p> {{ genre }} </p>
+    {% endif %}
 
 {% endblock %}

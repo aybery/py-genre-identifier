@@ -2,82 +2,56 @@ import os, random
 
 from flask import Flask, render_template, url_for, request, flash, redirect, send_from_directory
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import RequestEntityTooLarge
 
-from analysefile import analysis_instance
+from UploadFile import UploadFile
+from AnalyseFile import Predict
 
-# only .wav and .mp3 files (mp3 files will be converted to wav before analysis) can be uploaded
-ALLOWED_EXTENSIONS = {'wav', 'mp3'}
+from constants import (
+    UPLOAD_FOLDER,
+    MAX_CONTENT_LENGTH
+)
 
 # initiates the Flask server
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'Audio'
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000  # 16MB max size
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
 app.config['SECRET_KEY'] = 'SA$r"f@l0oPz404{hi!].m&£'
 
 
-@app.route("/")
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template("home.html")
-
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-@app.route('/upload', methods=['GET', 'POST'])
-def upload():
     error = None
     if request.method == 'POST':
 
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-
         file = request.files['file']
+        secure = secure_filename(file.filename)
 
-        #ftest = file.filename
-        #remove = ftest.rsplit('.', 1)[1].lower()
-        #print(file.filename.rsplit('.', 1)[1].lower())
-        #fileminus = (ftest.replace(("."+remove), "")).replace(' ', '-').lower()
-        #print(fileminus)
+        f = UploadFile(file, secure)
+        f.use_file()
 
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
+        error = f.exception
 
-        # Checks if there is a folder called "Audio"
-        path = os.getcwd() + "\Audio"
-        if os.path.isdir(path):
-            pass
-        else:
-            os.mkdir("Audio")
-
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
-
-            full_analysis = analysis_instance()
-
-            prediction = full_analysis.predict(filepath)
-
-            return render_template('upload.html', pred=prediction)
-
-            #  return redirect(url_for('analyse_file', name=filename))
-        else:
-            error = "This is a file with a wrong extension :("
-
-    return render_template('upload.html', error=error)
+        if error == None:
 
 
-@app.route('/upload/prediction')
-def prediction_analysis():
-    return render_template('analysis.html')
-    #return send_from_directory(app.config["UPLOAD_FOLDER"], name)
-    # somehow embed the audio file into html so that it can analyse instead of just presenting the file
+
+            prediction = "hello"
+
+            os.remove(f.save())
+            print(f.save(), "Removed")
+            return render_template('home.html', genre=prediction)
+
+    if error == None:
+        return render_template('home.html')
+    else:
+        return render_template('home.html', error=error)
+
+
+@app.errorhandler(413)
+@app.errorhandler(RequestEntityTooLarge)
+def app_handle_413(e):
+    return render_template('home.html', error='File is too large!'), 413
 
 
 @app.route("/about")
