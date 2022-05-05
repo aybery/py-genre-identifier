@@ -14,15 +14,13 @@ class UploadFile:
         self.exception = None
 
     def use_file(self):
-        print(self.exception)
         if not self.file_checks():
             return self.exception
-        print(self.exception)
+
         self.check_folder()
-        print(self.exception)
+
         if self.exception is None:
             self.save()
-        print(self.exception)
 
     def file_checks(self):
         # If the user does not select a file, the browser submits an

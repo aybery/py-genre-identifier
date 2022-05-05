@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 
 from UploadFile import UploadFile
-from AnalyseFile import Predict
+##from AnalyseFile import Predict
 
 from constants import (
     UPLOAD_FOLDER,
@@ -16,7 +16,7 @@ from constants import (
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
-app.config['SECRET_KEY'] = 'SA$r"f@l0oPz404{hi!].m&£'
+app.config['SECRET_KEY'] = SECRET_KEY
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -32,9 +32,7 @@ def home():
 
         error = f.exception
 
-        if error == None:
-
-
+        if error is None:
 
             prediction = "hello"
 
