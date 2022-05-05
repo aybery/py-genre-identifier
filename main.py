@@ -9,7 +9,8 @@ from UploadFile import UploadFile
 
 from constants import (
     UPLOAD_FOLDER,
-    MAX_CONTENT_LENGTH
+    MAX_CONTENT_LENGTH,
+    SECRET_KEY
 )
 
 # initiates the Flask server
@@ -34,13 +35,14 @@ def home():
 
         if error is None:
 
-            prediction = "hello"
+            # this will be retrived using the Analysis class by return 2 things
+            prediction, tempo = "hello", 120
 
             os.remove(f.save())
             print(f.save(), "Removed")
-            return render_template('home.html', genre=prediction)
+            return render_template('home.html', genre=prediction, tempo=tempo)
 
-    if error == None:
+    if error is None:
         return render_template('home.html')
     else:
         return render_template('home.html', error=error)

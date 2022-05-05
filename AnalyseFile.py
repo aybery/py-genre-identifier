@@ -4,6 +4,10 @@ import numpy as np
 import librosa
 import csv
 
+from constants import (
+    TEST_DATA
+)
+
 def analyse_file():
 
     wav = librosa.load()
@@ -16,7 +20,7 @@ class Predict:
     dataset = []
 
     def loadDataset(filename):
-        with open("features_30_sec.csv", 'rb') as f:
+        with open(TEST_DATA, 'rb') as f:
             while True:
                 try:
                     dataset.append(load(f))
@@ -24,7 +28,7 @@ class Predict:
                     f.close()
                     break
 
-    loadDataset("my.dat")
+    loadDataset(TEST_DATA)
 
     def distance(instance1, instance2, k):
         distance = 0
@@ -60,15 +64,20 @@ class Predict:
         sorter = sorted(classVote.items(), key=operator.itemgetter(1), reverse=True)
         return sorter[0][0]
 
-    results = defaultdict(int)
-    i = 1
-    for folder in os.listdir("./musics/wav_genres/"):
-        results[i] = folder
-        i += 1
-    (rate, sig) = wav.read("__path_to_new_audio_file_")
-    mfcc_feat = mfcc(sig, rate, winlen=0.020, appendEnergy=False)
-    covariance = np.cov(np.matrix.transpose(mfcc_feat))
-    mean_matrix = mfcc_feat.mean(0)
-    feature = (mean_matrix, covariance, 0)
-    pred = nearestClass(getNeighbors(dataset, feature, 5))
-    print(results[pred])
+    def run(self):
+        results = defaultdict(int)
+        i = 1
+        #  using TEST_DATA instead?
+        for folder in os.listdir("./musics/wav_genres/"):
+            results[i] = folder
+            i += 1
+        (rate, sig) = wav.read("__path_to_new_audio_file_")
+        mfcc_feat = mfcc(sig, rate, winlen=0.020, appendEnergy=False)
+        covariance = np.cov(np.matrix.transpose(mfcc_feat))
+        mean_matrix = mfcc_feat.mean(0)
+        feature = (mean_matrix, covariance, 0)
+        pred = nearestClass(getNeighbors(dataset, feature, 5))
+        print(results[pred])
+        #  tempo = librosa.helpFINISHTHIS
+        tempo = 120
+        return pred, tempo

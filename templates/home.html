@@ -28,7 +28,13 @@
     {% endif %}
 
     {% if genre %}
-        <p> {{ genre }} </p>
+        <div class="genre">
+            <h3>File Uploaded!</h3>
+    <p>
+        <strong>The genre was:</strong> {{ genre }} </br>
+        <strong>The tempo of your song was:</strong> {{ tempo }} bpm
+    </p>
+        </div>
     {% endif %}
 
 {% endblock %}

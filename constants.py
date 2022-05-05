@@ -27,3 +27,5 @@ GENRES = [
     'reggae',
     'rock'
 ]
+
+TEST_DATA = "features_30_sec.csv"
