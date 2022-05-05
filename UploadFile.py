@@ -12,6 +12,7 @@ class UploadFile:
         self.secure = secure
         self.path = None
         self.exception = None
+        self.fullpath = None
 
     def use_file(self):
         if not self.file_checks():
@@ -48,9 +49,13 @@ class UploadFile:
             filename = self.secure
             filepath = os.path.join(UPLOAD_FOLDER, filename)
             self.file.save(filepath)
+            self.fullpath = filepath
             return filepath
         else:
             self.exception = "This is a file with a wrong extension :("
             return self.exception
+
+    def getFilepath(self):
+        return self.fullpath
 
 

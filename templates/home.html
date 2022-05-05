@@ -27,14 +27,17 @@
         <p class=error><strong>Error:</strong> {{ error }}
     {% endif %}
 
-    {% if genre %}
+    {% if tempo %}
         <div class="genre">
             <h3>File Uploaded!</h3>
     <p>
-        <strong>The genre was:</strong> {{ genre }} </br>
-        <strong>The tempo of your song was:</strong> {{ tempo }} bpm
+        <strong>The song is</strong> {{ dur }} seconds long</br>
+        <strong>The tempo of your song was</strong> {{ tempo }} BPM
     </p>
         </div>
+        <img src="{{ url_for('static', filename='img/spec.png') }}">
     {% endif %}
+
+
 
 {% endblock %}

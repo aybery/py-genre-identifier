@@ -1,11 +1,13 @@
 import os, random
 
+import audioread
+import librosa
 from flask import Flask, render_template, url_for, request, flash, redirect, send_from_directory
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 
 from UploadFile import UploadFile
-##from AnalyseFile import Predict
+from Analysis import GetData
 
 from constants import (
     UPLOAD_FOLDER,
@@ -34,13 +36,22 @@ def home():
         error = f.exception
 
         if error is None:
-
             # this will be retrived using the Analysis class by return 2 things
-            prediction, tempo = "hello", 120
+            filepath = f.getFilepath()
 
-            os.remove(f.save())
+            print("THIS IS PATH",filepath)
+            print(f.secure, "SECURE THING")
+            analysis = GetData(f.secure, filepath)
+
+            temp, dur = analysis.run()
+
+            dur = round(int(dur), 5)
+            tempo = round(int(temp), 4)
+
+
+            os.remove(filepath)
             print(f.save(), "Removed")
-            return render_template('home.html', genre=prediction, tempo=tempo)
+            return render_template('home.html', tempo=tempo, dur=dur)
 
     if error is None:
         return render_template('home.html')
@@ -53,6 +64,9 @@ def home():
 def app_handle_413(e):
     return render_template('home.html', error='File is too large!'), 413
 
+@app.errorhandler(audioread.exceptions.NoBackendError)
+def app_handle_audioread(e):
+    return render_template('home.html', error='File corrupted :(')
 
 @app.route("/about")
 def about():

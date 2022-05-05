@@ -1,36 +1,41 @@
-#import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 
 import librosa
 import csv
 
+from librosa.feature import mfcc
+
 from constants import (
-    TEST_DATA
+    TEST_DATA,
+    SAMPLE_RATE
 )
 
-def analyse_file():
 
+def analyse_file():
     wav = librosa.load()
 
 
 class Predict:
-    def __init__(self):
+    def __init__(self, file, path):
+        self.filename = file
+        self.path = path
         self.prediction = None
+        self.dataset = []
+        self.sr = SAMPLE_RATE
 
-    dataset = []
-
-    def loadDataset(filename):
+    def loadDataset(self, file):
         with open(TEST_DATA, 'rb') as f:
             while True:
                 try:
-                    dataset.append(load(f))
+                    self.dataset.append(load(f))
                 except EOFError:
                     f.close()
                     break
 
     loadDataset(TEST_DATA)
 
-    def distance(instance1, instance2, k):
+    def distance(self, instance1, instance2, k):
         distance = 0
         mm1 = instance1[0]
         cm1 = instance1[1]
@@ -45,7 +50,7 @@ class Predict:
     def getNeighbors(trainingSet, instance, k):
         distances = []
         for x in range(len(trainingSet)):
-            dist = distance(trainingSet[x], instance, k) + distance(instance, trainingSet[x], k)
+            dist = distance(trainingSet[x], instance, k) + self.distance(instance, trainingSet[x], k)
             distances.append((trainingSet[x][2], dist))
         distances.sort(key=operator.itemgetter(1))
         neighbors = []
@@ -65,19 +70,14 @@ class Predict:
         return sorter[0][0]
 
     def run(self):
-        results = defaultdict(int)
-        i = 1
-        #  using TEST_DATA instead?
-        for folder in os.listdir("./musics/wav_genres/"):
-            results[i] = folder
-            i += 1
-        (rate, sig) = wav.read("__path_to_new_audio_file_")
+        (rate, sig) = librosa.read(self.path)
         mfcc_feat = mfcc(sig, rate, winlen=0.020, appendEnergy=False)
         covariance = np.cov(np.matrix.transpose(mfcc_feat))
         mean_matrix = mfcc_feat.mean(0)
         feature = (mean_matrix, covariance, 0)
-        pred = nearestClass(getNeighbors(dataset, feature, 5))
-        print(results[pred])
+        pred = self.nearestClass(self.getNeighbors(self.dataset, feature, 5))
         #  tempo = librosa.helpFINISHTHIS
-        tempo = 120
+        y, self.sr = librosa.load(self.path)
+        tempo, _ = librosa.beat.beat_track(y, sr=self.sr)
+
         return pred, tempo
