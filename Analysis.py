@@ -1,14 +1,17 @@
 import librosa
 import random
+import os
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 from constants import (
     UPLOAD_FOLDER,
-    TEST_DATA,
+    MEL_SPEC_LOCATION,
     SAMPLE_RATE
 )
+
+import librosa.display
 
 
 class GetData:
@@ -18,31 +21,33 @@ class GetData:
         self.sr = SAMPLE_RATE
 
     def getTempo(self, y, sr):
-        tempo, beat_frames = librosa.beat.beat_track(y, sr=sr)
+        tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
         return tempo
 
-    def getSpec(self, y, sr):
-        window_size = 1024
-        window = np.hanning(window_size)
-        stft = librosa.core.spectrum.stft(y, n_fft=window_size, hop_length=512, window=window)
-        out = 2 * np.abs(stft) / np.sum(window)
+    def getSpec(self, y):
+        D = librosa.stft(y)
+        S_dB = librosa.amplitude_to_db(np.abs(D), ref=np.max)
+        plt.figure()
+        librosa.specshow(S_dB)
+        plt.colorbar()
 
-        # For plotting headlessly
-        from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-
-        fig = plt.Figure()
-        canvas = FigureCanvas(fig)
-        ax = fig.add_subplot(111)
-        p = librosa.display.specshow(librosa.amplitude_to_db(out, ref=np.max), ax=ax, y_axis='log', x_axis='time')
-
-        fig.savefig('static/img/specta.png')
-        #print(fig.savefig('spec.png'))
+        plt.savefig()
+        print("HI IT MES WORKINGIN GETSPEC")
 
 
     def run(self):
+        #  Generates the file path for the audio file
         self.path = UPLOAD_FOLDER + '\\' + self.file
-        print(self.path)
+
+        #  Loads the file from the designated file path
         y, sr = librosa.load(str(self.path), sr=None)
-        tempo = self.getTempo(y, sr)
-        dur = librosa.get_duration(y=y, sr=sr)
+        #  Trims the silence of the beginning and end of the track
+        yt, index = librosa.effects.trim(y)
+
+        #  Calls the tempo function to get the tempo of the audio, value returned is the tempo value
+        tempo = self.getTempo(yt, sr)
+        #  Gets the duration of the audio file with is stored in a variable
+        dur = librosa.get_duration(y=yt, sr=sr)
+
+
         return tempo, dur

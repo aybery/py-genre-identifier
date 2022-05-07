@@ -12,8 +12,11 @@ from Analysis import GetData
 from constants import (
     UPLOAD_FOLDER,
     MAX_CONTENT_LENGTH,
-    SECRET_KEY
+    SECRET_KEY,
+    MEL_SPEC_LOCATION
 )
+
+import matplotlib.pyplot as plt
 
 # initiates the Flask server
 app = Flask(__name__)
@@ -48,6 +51,8 @@ def home():
             dur = round(int(dur), 5)
             tempo = round(int(temp), 4)
 
+            #analysis.getSpec(str(analysis.path))
+            getSpecTest()
 
             os.remove(filepath)
             print(f.save(), "Removed")
@@ -72,6 +77,23 @@ def app_handle_audioread(e):
 def about():
     return render_template("about.html")
 
+
+
+def getSpecTest(self):
+    x = [1, 2, 3, 4, 5, 6, 7]
+    y = []
+
+    for i in range(0, 7):
+        val = random.randint(1, 20)
+        y.append(val)
+
+    plt.plot(x, y)
+    plt.xlabel('X Var')
+    plt.ylabel('Y Var')
+
+    plt.savefig(MEL_SPEC_LOCATION)
+    print("hi this is me working")
+    plt.close()
 
 if __name__ == "__main__":
     app.run(debug=True)
