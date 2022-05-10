@@ -1,17 +1,13 @@
 import librosa
-import random
-import os
+import librosa.display
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 from constants import (
     UPLOAD_FOLDER,
-    MEL_SPEC_LOCATION,
     SAMPLE_RATE
 )
-
-import librosa.display
 
 
 class GetData:
@@ -20,11 +16,11 @@ class GetData:
         self.path = path
         self.sr = SAMPLE_RATE
 
-    def getTempo(self, y, sr):
+    def get_tempo(self, y, sr):
         tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
         return tempo
 
-    def getSpec(self, y):
+    def get_spec(self, y):
         D = librosa.stft(y)
         S_dB = librosa.amplitude_to_db(np.abs(D), ref=np.max)
         plt.figure()
@@ -32,8 +28,6 @@ class GetData:
         plt.colorbar()
 
         plt.savefig()
-        print("HI IT MES WORKINGIN GETSPEC")
-
 
     def run(self):
         #  Generates the file path for the audio file
@@ -48,6 +42,5 @@ class GetData:
         tempo = self.getTempo(yt, sr)
         #  Gets the duration of the audio file with is stored in a variable
         dur = librosa.get_duration(y=yt, sr=sr)
-
 
         return tempo, dur

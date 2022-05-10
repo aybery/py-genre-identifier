@@ -34,8 +34,7 @@ class UploadFile:
 
     def file_allowed(self):
         return '.' in self.file.filename and \
-           self.file.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
+               self.file.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
     def check_folder(self):
         #  Checks if there is a folder called "Audio"
@@ -57,5 +56,3 @@ class UploadFile:
 
     def getFilepath(self):
         return self.fullpath
-
-

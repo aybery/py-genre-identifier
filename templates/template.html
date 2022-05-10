@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html>
+  <!-- this is the head of the template file -->
   <head>
+      <!-- allows a title to be passed into the template file -->
       <title>{% block title %} {% endblock %}</title>
+      <!-- imports the css file used across all webpages -->
       <link rel="stylesheet" href="{{ url_for('static', filename='css/template.css') }}">
-      <!-- <link rel="stylesheet" href="../static/css/template.css"> -->
   </head>
 
   <body>
+    <!-- header used for the navigation bar and logo -->
     <header>
-      <a href="{{ url_for('home') }}" class="logo">Genre<span style="color: navy">finder</span>.</a>
+      <!-- logo that is clickable to direct you to the homepage -->
+      <a href="{{ url_for('home') }}" class="logo">Genre<span style="color: #3C78D8">finder</span>.</a>
+      <!-- navigation menu -->
       <nav>
         <a href="{{ url_for('home') }}" {% if request.path == url_for('home') %} class="active" {% endif %} >Home</a>
         <a href="{{ url_for('about') }}" {% if request.path == url_for('about') %} class="active" {% endif %} >About</a>
@@ -16,15 +21,24 @@
 
     </header>
 
+    <!--
+    this is where the template file is useful because you don't need to reuse code,
+     instead in the other files you can put HTML inbetween the tags to get it to fit
+     in the right place without breaking anything else that is in the template.
+     -->
     {% block content %}
     {% endblock %}
 
+  <!-- houses everything in the footer that is at bottom of every page -->
   <footer>
+    <!-- text crediting the creator of the website in a separate div class -->
     <div class="footer-txt">
       &copy; 2022 Louis Abery. All rights reserved.
     </div>
-    <a href="https://github.com/aybery/py-genre-identifier"><img src="{{ url_for('static', filename='img/git.png') }}"></a>
+    <!-- link to the source code of the project with a GitHub image as the button -->
+    <a href="https://github.com/aybery/py-genre-identifier" target="_blank"><img src="{{ url_for('static', filename='img/git.png') }}"></a>
   </footer>
 
   </body>
 </html>
+

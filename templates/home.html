@@ -16,13 +16,14 @@
         Please upload a .wav audio file that is less than 16 MB <br>
     </p>
     <form method = "POST" enctype = "multipart/form-data">
-        <div class="upload-btn-wrapper">
+        <div class="btn-wrapper">
             <button class="btn">
                 <span style="color: white">Upload</span>
             </button>
             <input type = "file" name = "file" onchange="form.submit()" />
         </div>
     </form>
+
     {% if error %}
         <p class=error><strong>Error:</strong> {{ error }}
     {% endif %}
@@ -37,7 +38,5 @@
         </div>
         <img src="{{ url_for('static', filename='img/melspec.png') }}">
     {% endif %}
-
-
 
 {% endblock %}
