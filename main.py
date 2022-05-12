@@ -1,8 +1,5 @@
 import audioread
-import random
 import os
-
-import matplotlib.pyplot as plt
 
 from flask import Flask, render_template, request
 from werkzeug.exceptions import RequestEntityTooLarge
@@ -14,8 +11,7 @@ from UploadFile import UploadFile
 from constants import (
     UPLOAD_FOLDER,
     MAX_CONTENT_LENGTH,
-    SECRET_KEY,
-    MEL_SPEC_LOCATION
+    SECRET_KEY
 )
 
 # initiates the Flask server
@@ -29,53 +25,57 @@ app.config['SECRET_KEY'] = SECRET_KEY
 @app.route('/', methods=['GET', 'POST'])
 def home():
     error = None
+    tempo = None
+    dur = None
     if request.method == 'POST':
 
+        #  Collecting the file data
         file = request.files['file']
         secure = secure_filename(file.filename)
+        #   Gets the file path
+        filepath = UPLOAD_FOLDER + '\\' + secure
 
+        #  Calls the class from UploadFile.py and sends the two variables declared above
         f = UploadFile(file, secure)
+        #  Calls the use_file method so that the file starts to be handled
         f.use_file()
 
+        #  The error is fetched from the UploadFile.py
         error = f.exception
 
         if error is None:
-            #  This will be retrieved using the Analysis class by return 2 things
-            filepath = f.getFilepath()
-
-            print("THIS IS PATH", filepath)
-            print(f.secure, "SECURE THING")
+            #  Starts the analysis class
             analysis = GetData(f.secure, filepath)
 
+            #  Gets the temp and dur value from run()
             temp, dur = analysis.run()
 
+            #  Rounding the values to easier to read numbers
             dur = round(int(dur), 5)
             tempo = round(int(temp), 4)
 
+            #  Deletes the file after use
             os.remove(filepath)
             print(f.save(), "Removed")
-            #  Renders the webpage using home.html located in the template folder
-            return render_template('home.html', tempo=tempo, dur=dur)
 
-    if error is None:
-        #  Renders the webpage using home.html located in the template folder
-        return render_template('home.html')
-    else:
-        #  Renders the webpage using home.html located in the template folder
-        return render_template('home.html', error=error)
+    #  Renders the webpage using home.html located in the template folder
+    return render_template('home.html', tempo=tempo, dur=dur, error=error)
 
 
+#  Handles EntityTooLarge Error
 @app.errorhandler(413)
 @app.errorhandler(RequestEntityTooLarge)
 def app_handle_413(e):
     return render_template('home.html', error='File is too large!'), 413
 
 
+#  Handles NoBackendError Error
 @app.errorhandler(audioread.exceptions.NoBackendError)
 def app_handle_audioread(e):
     return render_template('home.html', error='File corrupted :(')
 
 
+#  Gets the html file for the "/about"
 @app.route("/about")
 def about():
     #  Renders the webpage using about.html located in the template folder
@@ -86,20 +86,3 @@ def about():
 #  Only starts the flask server if this file is the main file
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-def get_spec_test():
-    x = [1, 2, 3, 4, 5, 6, 7]
-    y = []
-
-    for i in range(0, 7):
-        val = random.randint(1, 20)
-        y.append(val)
-
-    plt.plot(x, y)
-    plt.xlabel('X Var')
-    plt.ylabel('Y Var')
-
-    plt.savefig(MEL_SPEC_LOCATION)
-    print("hi this is me working")
-    plt.close()

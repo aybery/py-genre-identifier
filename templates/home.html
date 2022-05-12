@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 {% extends "template.html" %}
 
-
+<!-- puts the title into the template -->
 {% block title %}
 
   Home
 
 {% endblock %}
 
+<!-- puts the content into the template -->
 {% block content %}
 
+    <!-- header -->
     <h1> Welcome! </h1>
+    <!-- description -->
     <p>
         <strong>How to use:</strong> <br>
-        Please upload a .wav audio file that is less than 16 MB <br>
+        Please upload a .wav audio file that is less than 100 MB <br>
     </p>
+
+    <!-- upload button stuff -->
     <form method = "POST" enctype = "multipart/form-data">
         <div class="btn-wrapper">
             <button class="btn">
@@ -24,19 +29,21 @@
         </div>
     </form>
 
+    <!-- if error is not None then this HTML is shown -->
     {% if error %}
         <p class=error><strong>Error:</strong> {{ error }}
     {% endif %}
 
+    <!-- if tempo not None then this HTML is shown -->
     {% if tempo %}
-        <div class="genre">
-            <h3>File Uploaded!</h3>
-    <p>
-        <strong>The song is</strong> {{ dur }} seconds long</br>
-        <strong>The tempo of your song was</strong> {{ tempo }} BPM
-    </p>
-        </div>
-        <img src="{{ url_for('static', filename='img/melspec.png') }}">
+    <div class="genre">
+        <h3>File Uploaded!</h3>
+        <p>
+            <strong>The song is</strong> {{ dur }} seconds long</br>
+            <strong>The tempo of your song was</strong> {{ tempo }} BPM
+        </p>
+    </div>
+    <!-- <img src="{{ url_for('static', filename='img/melspec.png') }}"> -->
     {% endif %}
 
 {% endblock %}
